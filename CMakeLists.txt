@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-project("TinyALSA" C)
+execute_process(
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/version-bump.sh -s
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE TINYALSA_VERSION
+    ERROR_VARIABLE VERSION_ERROR
+    RESULT_VARIABLE VERSION_OK)
+
+if(NOT "${VERSION_OK}" STREQUAL "0")
+  message(FATAL_ERROR "${VERSION_ERROR}")
+endif()
+
+project("TinyALSA" LANGUAGES C VERSION ${TINYALSA_VERSION})
+
+message("Project version ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+message("Version: ${PROJECT_VERSION}")
 
 set (HDRS
     "include/tinyalsa/attributes.h"
